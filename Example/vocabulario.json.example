@@ -1,0 +1,16 @@
+{
+  "sustituciones": {},
+  "initial_prompt": [
+    "SpeakMe",
+    "Whisper",
+    "Ollama",
+    "Python",
+    "GitHub",
+    "API",
+    "JSON",
+    "backend",
+    "frontend",
+    "dataset"
+  ],
+  "sustituciones_ia": {}
+}

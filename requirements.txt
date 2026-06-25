@@ -1,0 +1,17 @@
+faster-whisper>=1.2.1
+language_tool_python>=3.3.0
+numpy>=2.4.0
+onnx-asr>=0.11.0
+pillow>=12.0.0
+psutil>=7.0.0
+PyAudio>=0.2.14
+pynput>=1.8.0
+pyperclip>=1.9.0
+pystray>=0.19.5
+pywin32>=311
+requests>=2.33.0
+sounddevice>=0.5.1
+soundfile>=0.13.0
+sv_ttk>=2.6.0
+nano_parakeet>=0.2.1
+pywhispercpp>=1.4.1

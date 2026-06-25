@@ -1,0 +1,16 @@
+venv/
+*.log
+config.json
+mi_estilo.md
+historial.json
+vocabulario.json
+modos.json
+__pycache__/
+*.pyc
+.env
+
+build/
+dist/
+audio_cache/
+.claude/
+notas.json

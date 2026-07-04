@@ -49,6 +49,42 @@ SpeakMe! te da control total, de forma directa y sin magia negra.
 - 🕘👷‍♂️ **Historial & laboratorio** — Escucha el dictado, reprocesa, experimenta, edita y compara resultados.
 - 🪟 **100% Windows nativo** — Portable, sin instalación.
 
+## 🔒 Transparencia y seguridad
+
+SpeakMe! es **código abierto (MIT)**. Todo lo que hace está en los `.py` que puedes inspeccionar, compilar tú mismo o auditar. No hay telemetría, ni analytics, ni llamadas ocultas.
+
+### ¿Qué permisos necesita y por qué?
+
+| Permiso | ¿Qué usa? | ¿Para qué? | ¿Obligatorio? | ¿Cuándo ocurre? |
+|---|---|---|---|---|
+| **⌨️ Hooks de teclado** | `pynput.keyboard` | Detectar tu tecla de grabación (ej. Ctrl derecha) para empezar/parar dictado sin estar enfocado en la app | ❌ Configurable | Solo mientras el listener está activo |
+| **🖱️ Hooks de ratón** | `pynput.mouse` | Detectar clic de botón central como trigger de grabación alternativo | ❌ Configurable (opción "tecla" por defecto) | Solo mientras el listener está activo |
+| **📋 Portapapeles** | `pyperclip` + `pyautogui` | Copiar el texto transcrito y pegarlo donde estés escribiendo (Word, Chrome, bloc de notas, etc.) | ✅ Sí (es la única forma de inyectar texto en cualquier app) | Solo cuando dictas y se completa la transcripción |
+| **🔊 Micrófono** | `pyaudio` | Capturar tu voz para transcribirla | ✅ Sí (es toda la app) | Solo durante la grabación activa |
+| **🖥️ Ventana activa** | `win32gui` | Recordar qué ventana estaba enfocada al empezar a grabar, para pegar ahí el resultado | ✅ Sí (para que el texto aparezca donde esperas) | Solo al iniciar y finalizar una grabación |
+| **🚀 Inicio con Windows** | `winreg` (HKCU) | Opción para que SpeakMe! arranque automáticamente al iniciar sesión | ❌ Desactivado por defecto. Se activa desde Ajustes | Solo si el usuario lo activa expresamente |
+| **🌐 Red (Internet)** | `requests` / `urllib` | **Solo** si usas APIs cloud: Gemini, Groq u OpenAI. También para descargar modelos whisper automáticamente | ❌ **100% opcional.** STT local (Whisper/Parakeet) funciona sin conexión | Solo cuando configuras un motor cloud o descargas un modelo nuevo |
+| **🤖 Ollama (localhost)** | `subprocess` + `requests` | Comunicarse con Ollama en tu propio PC (`localhost:11434`) para LLM local. **Nunca sale de tu máquina** | ❌ Solo si usas Ollama como motor IA | Solo al procesar texto con Ollama |
+
+> 🔍 El código fuente está en la rama `main` de este repositorio. Cada release incluye el SHA256 del .zip para que verifiques que el binario coincide con el código declarado. Si prefieres máxima transparencia, compila desde código con `pyinstaller SpeakMe.spec --clean --noconfirm`.
+
+### ¿Qué NO hace SpeakMe!?
+
+- ❌ **No envía tu audio a ningún servidor** si usas STT local (Whisper / Parakeet). La transcripción es 100% offline.
+- ❌ **No recopila telemetría, analytics, ni estadísticas de uso.** Cero llamadas a servidores externos sin tu consentimiento explícito.
+- ❌ **No instala nada en segundo plano.** Es portable: borras la carpeta y desaparece sin dejar rastro.
+- ❌ **No modifica el registro de Windows** excepto si activas "Inicio con Windows" desde los ajustes.
+
+### Verificación del binario
+
+Cada release publica el hash SHA256 del `.zip`. Puedes verificarlo con PowerShell:
+
+```powershell
+Get-FileHash .\SpeakMe_v0.9.5.zip -Algorithm SHA256
+```
+
+O compilar tú mismo desde el código siguiendo la [guía de desarrollo](assets/guia_motores.md).
+
 ## 📦 Descarga
 
 👉 [**Última versión**](https://github.com/TonynoARS/SpeakMe/releases)

@@ -30,6 +30,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('assets', 'assets'),
+        ('locales', 'locales'),
         ('modos.json', '.'),
         ('vocabulario.json', '.'),
         (os.path.join(faster_whisper_path, 'assets'), 'faster_whisper/assets'),

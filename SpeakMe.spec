@@ -2,6 +2,7 @@
 
 import faster_whisper
 import os
+from PyInstaller.utils.hooks import collect_data_files
 
 _EXCLUIR_MODULOS = [
     'torch', 'torchaudio', 'torchvision',
@@ -33,6 +34,7 @@ a = Analysis(
         ('locales', 'locales'),
         ('modos.json', '.'),
         ('vocabulario.json', '.'),
+        *collect_data_files('language_tool_python'),
         (os.path.join(faster_whisper_path, 'assets'), 'faster_whisper/assets'),
     ],
     hiddenimports=['onnx_asr', 'onnxruntime', 'pyautogui'],

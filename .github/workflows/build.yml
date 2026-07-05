@@ -69,14 +69,29 @@ jobs:
           Remove-Item -Path "$dist\notas.json" -ErrorAction SilentlyContinue
           Remove-Item -Path "$dist\*.log" -ErrorAction SilentlyContinue
           Remove-Item -Path "$dist\audio_cache" -Recurse -ErrorAction SilentlyContinue
-          Write-Output "Cleaned dist:"
-          Get-ChildItem "$dist"
+          # Debug: mostrar qué hay en el dist
+          Write-Output "=== Contenido de dist/SpeakMe ==="
+          Get-ChildItem "$dist" -Recurse -Depth 1 | Select-Object FullName, Length
+          Write-Output "================================"
 
       - name: Package and checksum
         id: package
         shell: pwsh
         run: |
           $dist = "dist\SpeakMe"
+          # Asegurar modos.json en la raíz del dist (lo necesita la app empaquetada)
+          if (-not (Test-Path "$dist\modos.json")) {
+            if (Test-Path "modos.json") {
+              Copy-Item "modos.json" "$dist\modos.json"
+              Write-Output "modos.json copiado manualmente al dist"
+            } elseif (Test-Path "modos.default.json") {
+              Copy-Item "modos.default.json" "$dist\modos.json"
+              Write-Output "modos.json copiado desde modos.default.json al dist"
+            } else {
+              Write-Output "ERROR: no se encuentra modos.json ni modos.default.json"
+              exit 1
+            }
+          }
           # Usar el nombre del tag como versión: v0.9.5 → SpeakMe_v0.9.5.zip
           $version = "${{ github.ref_name }}"
           if (-not $version) { $version = "${{ github.event.inputs.version_tag }}" }

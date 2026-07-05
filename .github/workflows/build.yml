@@ -37,6 +37,25 @@ jobs:
         run: choco install upx --no-progress -y
         shell: pwsh
 
+      - name: Generate missing build files
+        shell: pwsh
+        run: |
+          # modos.json no se autogenera en runtime - copiar desde default
+          if (-not (Test-Path "modos.json")) {
+            if (Test-Path "modos.default.json") {
+              Copy-Item "modos.default.json" "modos.json"
+              Write-Output "modos.json generated from modos.default.json"
+            } else {
+              Write-Output "ERROR: modos.default.json not found!"
+              exit 1
+            }
+          }
+          # vocabulario.json se autogenera en runtime - crear placeholder
+          if (-not (Test-Path "vocabulario.json")) {
+            Set-Content -Path "vocabulario.json" -Value '{"sustituciones": {}, "initial_prompt": ["SpeakMe", "Whisper", "Ollama"]}'
+            Write-Output "vocabulario.json generated (placeholder)"
+          }
+
       - name: Build with PyInstaller
         run: pyinstaller SpeakMe.spec --clean --noconfirm
 

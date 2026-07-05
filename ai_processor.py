@@ -5,13 +5,16 @@ import sys
 import json
 import logging
 import subprocess
+import shutil
 import time
 import threading
 
 if getattr(sys, 'frozen', False):
     BASE_DIR = os.path.dirname(sys.executable)
+    RESOURCE_DIR = sys._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    RESOURCE_DIR = BASE_DIR
 
 log = logging.getLogger(__name__)
 
@@ -196,10 +199,18 @@ MODOS_DEFAULT = {
 }
 
 _MODOS_FILE = os.path.join(BASE_DIR, "modos.json")
+_MODOS_FILE_EMPAQUETADO = os.path.join(RESOURCE_DIR, "modos.json")
 
 def _inicializar_modos_json():
     if os.path.exists(_MODOS_FILE):
         return
+    if os.path.exists(_MODOS_FILE_EMPAQUETADO) and _MODOS_FILE_EMPAQUETADO != _MODOS_FILE:
+        try:
+            shutil.copyfile(_MODOS_FILE_EMPAQUETADO, _MODOS_FILE)
+            log.info("modos.json copiado desde los recursos empaquetados")
+            return
+        except Exception as e:
+            log.error(f"Error copiando modos.json empaquetado: {e}")
     try:
         with open(_MODOS_FILE, "w", encoding="utf-8") as f:
             json.dump(_MODOS_BASE, f, indent=2, ensure_ascii=False)

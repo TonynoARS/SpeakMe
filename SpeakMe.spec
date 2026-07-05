@@ -35,7 +35,7 @@ a = Analysis(
         ('vocabulario.json', '.'),
         (os.path.join(faster_whisper_path, 'assets'), 'faster_whisper/assets'),
     ],
-    hiddenimports=['onnx_asr', 'onnxruntime'],
+    hiddenimports=['onnx_asr', 'onnxruntime', 'pyautogui'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

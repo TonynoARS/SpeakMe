@@ -10,6 +10,7 @@ import ctypes
 import win32gui
 import pyautogui
 import pyaudio
+import requests
 from faster_whisper import WhisperModel
 from pynput import mouse, keyboard
 import tkinter as tk
@@ -223,14 +224,7 @@ class SpeakMe:
 
     def _detectar_ollama(self):
         try:
-            import subprocess
-
-            subprocess.run(
-                ["ollama", "list"],
-                capture_output=True,
-                timeout=3,
-                creationflags=subprocess.CREATE_NO_WINDOW,
-            )
+            requests.get("http://localhost:11434/api/tags", timeout=2)
             self._ollama_disponible = True
         except Exception as e:
             self._ollama_disponible = False
